@@ -18,11 +18,11 @@ my @tetramers;
 my @result;
 my @names;
 
-foreach my $oldest (@nucl){
-	foreach my $older (@nucl){
-		foreach my $old (@nucl){
+foreach my $i (@nucl){
+	foreach my $j (@nucl){
+		foreach my $k (@nucl){
 			foreach(@nucl){
-				push @tetramers,$oldest.$older.$old.$_;
+				push @tetramers,$i.$j.$k.$_;
 			}
 		}
 	}

@@ -36,7 +36,7 @@ foreach(@tetramers){
 print "\n";
 
 foreach(@data) {
-	@result = "";
+	@result = ();
 	($title, $seq) = split /\n/,$_,2;
 	push @names,$title;
 	$seq =~ s/\n//;
@@ -45,7 +45,6 @@ foreach(@data) {
 		push @result,sprintf "%.4f", 100*($seq =~ s/$_//gi)/$length;
 	}
 	print "$title";
-	shift @result;
 	foreach(@result){
 		print "\t$_";
 	}

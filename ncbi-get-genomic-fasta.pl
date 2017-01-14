@@ -6,7 +6,6 @@
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 
-Eric Sayers and David Wheeler.
 use warnings;
 use LWP::Simple;
 use Net::FTP;
@@ -17,7 +16,7 @@ my $password = 'anonymous@mail.com';
 
 if (not defined $ARGV[0] or $ARGV[0] =~ /-h*/){
 	print "Usage $0 <list of accesion numbers>.\n";
-	print "List should have one accesion number in each line.\n"
+	print "List should have one accesion number in each line.\n";
 	exit;
 }
 
@@ -32,6 +31,7 @@ $f->login($user, $password) or die "Can't log $user in\n";
 print "Succesfully connected to NCBI!\n";
 print "$N files will be downloaded.\n";
 
+$f->binary();
 
 my ($ftpath,$dir,$file_to_get);
 my @files;

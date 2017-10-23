@@ -11,8 +11,9 @@ my @node=(0);
 my $cont = 0;
 my $m = 0;
 my $depth = 0;
+my $bad = 0;
 
-my $fold = 4;	#Coverage difference to report
+my $fold = 3;	#Coverage difference to report
 my $window = 50; #Window size
 my $slip = 10;	#Step size
 
@@ -29,6 +30,7 @@ while(<>){
 			}
 			$depth = $depth/$window;
 			if ($depth > $fold * $median || $depth < $median / $fold){
+				$bad = 1;
 				if ($cont == 1){
 					#Exception continues
 					$m = $node[$i] if $m < $node[$i];
@@ -55,9 +57,11 @@ while(<>){
 			print "$oldname\t$median\t$m\tmax\n";
 			print "$oldname\t$median\t$node[$i]\t$i\n";
 		}
+		print "$oldname\t$median\tOkay\n" if $bad == 0;
 		$m = 0;
 		$cont = 0;
 		@node=(0);
+		$bad = 0;
 	}
 	push @node,$d;
 	$oldname = $n;

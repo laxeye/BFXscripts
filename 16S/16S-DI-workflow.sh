@@ -75,9 +75,9 @@ mkdir tmp/
 echo "Quality trimming and filtering"
 if [[ $R1 == *gz ]]
 then
-	fastq-mcf -o tmp/R1.fq -o tmp/R2.fq n/a <(gunzip -ck $R1;) <(gunzip -ck $R2;) -q $Q -w 5 -k 0
+	fastq-mcf -o tmp/R1.fq -o tmp/R2.fq n/a <(gunzip -ck $R1;) <(gunzip -ck $R2;) -q $Q -w 10 -k 0 -l 50
 else
-	fastq-mcf -o tmp/R1.fq -o tmp/R2.fq n/a $R1 $R2 -q $Q -w 5 -k 0
+	fastq-mcf -o tmp/R1.fq -o tmp/R2.fq n/a $R1 $R2 -q $Q -w 10 -k 0 -l 50
 fi
 
 # 1. Generating barcodes-only fastq files
@@ -93,7 +93,7 @@ seqtk trimfq -b 12 tmp/R2.fq > tmp/R2_trimmed.fastq
 
 # 3. Merging paired sequences, leaving only merged reads
 echo "Merging paired sequences"
-seqprep -f tmp/R1_trimmed.fastq -r tmp/R2_trimmed.fastq -1 /dev/null -2 /dev/null -s tmp/Merged.fastq.gz && rm tmp/R[12]*f*q && gunzip tmp/Merged.fastq.gz
+seqprep -m 0.1 -f tmp/R1_trimmed.fastq -r tmp/R2_trimmed.fastq -1 tmp/U1.fastq.gz -2 tmp/U2.fastq.gz -s tmp/Merged.fastq.gz && rm tmp/R[12]*f*q && gunzip tmp/Merged.fastq.gz
 
 
 # 4. Trimming off spacers and primers

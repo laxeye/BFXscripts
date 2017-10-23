@@ -16,7 +16,6 @@ my ($title, $seq, $length);
 my @nucl = ("A", "C", "G", "T");
 my @tetramers;
 my @result;
-my @names;
 
 foreach my $i (@nucl){
 	foreach my $j (@nucl){
@@ -38,7 +37,6 @@ print "\n";
 foreach(@data) {
 	@result = ();
 	($title, $seq) = split /\n/,$_,2;
-	push @names,$title;
 	$seq =~ s/\n//;
 	$length = length($seq) + 1;
 	foreach(@tetramers){
@@ -48,8 +46,7 @@ foreach(@data) {
 	foreach(@result){
 		print "\t$_";
 	}
-	print "\n";
-	
+	print "\n";	
 }
 
 sub usage{
@@ -58,7 +55,7 @@ sub usage{
 	print "\#\#\#\#\#\# Usage: tetramers.pl <input.fasta> > outut.csv \#\#\#\#\#\#\#\#\n";
 	print "\#\#\#\#\# The output is tab-separated and includes header \#\#\#\#\#\#\#\n";
 	print "\#\#\#\#\#\#\#\#\#\#\# Licensed under The MIT License (MIT) \#\#\#\#\#\#\#\#\#\#\#\#\n";
-	print "\#\#\#\#\#\#\#\# Copyright (c) Aleksei A. Korzhenkov, 2016 \#\#\#\#\#\#\#\#\#\#\n";
+	print "\#\#\#\#\#\# Copyright (c) Aleksei A. Korzhenkov, 2016-2017 \#\#\#\#\#\#\#\n";
 	print "\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\n";
 	exit;
 }

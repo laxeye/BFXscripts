@@ -4,7 +4,7 @@ use warnings;
 
 local $/ = ">";
 
-usage() if not defined $ARGV[0];
+usage() if $#ARGV != 0;
 
 open F,"$ARGV[0]" || die;
 	my @data = <F>;
@@ -20,9 +20,7 @@ my @result;
 foreach my $i (@nucl){
 	foreach my $j (@nucl){
 		foreach my $k (@nucl){
-			foreach(@nucl){
-				push @tetramers,$i.$j.$k.$_;
-			}
+			push @tetramers,$i.$j.$k.$_ foreach(@nucl)
 		}
 	}
 }
@@ -34,13 +32,16 @@ foreach(@tetramers){
 }
 print "\n";
 
+my $count;
+
 foreach(@data) {
 	@result = ();
 	($title, $seq) = split /\n/,$_,2;
 	$seq =~ s/\n//;
-	$length = length($seq) + 1;
+	$length = length($seq);
 	foreach(@tetramers){
-		push @result,sprintf "%.4f", 100*($seq =~ s/$_//gi)/$length;
+		$count = () = ($seq =~ /$_/gi);
+		push @result,sprintf "%.4f", 100*$count/$length;
 	}
 	print "$title";
 	foreach(@result){
@@ -52,8 +53,9 @@ foreach(@data) {
 sub usage{
 	print "\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\n";
 	print "\#Tetranucleotide statistics for (meta)genomic DNA sequences \#\n";
-	print "\#\#\#\#\#\# Usage: tetramers.pl <input.fasta> > outut.csv \#\#\#\#\#\#\#\#\n";
-	print "\#\#\#\#\# The output is tab-separated and includes header \#\#\#\#\#\#\#\n";
+	print "\#\#\#\#\#\#\# Usage: tetramers.pl <input.fasta> > outut.csv \#\#\#\#\#\#\#\n";
+	print "\#\#\#\#\#\# The output is tab-separated and includes header \#\#\#\#\#\#\n";
+	print "\#\#\#\#\#\#\#\#\#\#\# The values are presented as percents \#\#\#\#\#\#\#\#\#\#\#\#\n";
 	print "\#\#\#\#\#\#\#\#\#\#\# Licensed under The MIT License (MIT) \#\#\#\#\#\#\#\#\#\#\#\#\n";
 	print "\#\#\#\#\#\# Copyright (c) Aleksei A. Korzhenkov, 2016-2017 \#\#\#\#\#\#\#\n";
 	print "\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\n";

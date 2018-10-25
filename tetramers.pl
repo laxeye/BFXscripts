@@ -2,20 +2,18 @@
 use strict;
 use warnings;
 
-local $/ = ">";
-
 usage() if $#ARGV != 0;
 
-open F,"$ARGV[0]" || die;
-	my @data = <F>;
+#Reading data
+local $/ = ">";
+open(F,'<',"$ARGV[0]") || die $!;
+my @data = <F>;
 close F;
-
 shift @data;
 
-my ($title, $seq, $length);
+#Generating tetramers
 my @nucl = ("A", "C", "G", "T");
 my @tetramers;
-my @result;
 
 foreach my $i (@nucl){
 	foreach my $j (@nucl){
@@ -25,39 +23,34 @@ foreach my $i (@nucl){
 	}
 }
 
+#Printing header
 print "#SequenceName";
-
-foreach(@tetramers){
-	print "\t$_";
-}
+print map {"\t" . $_} @tetramers;
 print "\n";
 
-my $count;
-
+#Iterating through data
 foreach(@data) {
-	@result = ();
-	($title, $seq) = split /\n/,$_,2;
+	my @result = ();
+	my ($title, $seq) = split /\n/,$_,2;
 	$seq =~ s/\n//;
-	$length = length($seq);
+	my $length = length($seq) - 3;
 	foreach(@tetramers){
-		$count = () = ($seq =~ /$_/gi);
+		my $count = () = ($seq =~ /$_/gi);
 		push @result,sprintf "%.4f", 100*$count/$length;
 	}
 	print "$title";
-	foreach(@result){
-		print "\t$_";
-	}
+	print map {"\t" . $_} @result;
 	print "\n";	
 }
 
 sub usage{
 	print "\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\n";
 	print "\#Tetranucleotide statistics for (meta)genomic DNA sequences \#\n";
-	print "\#\#\#\#\#\#\# Usage: tetramers.pl <input.fasta> > outut.csv \#\#\#\#\#\#\#\n";
+	print "\#\#\#\#\#\#\# Usage: tetramers.pl <input.fasta> > output.csv \#\#\#\#\#\#\n";
 	print "\#\#\#\#\#\# The output is tab-separated and includes header \#\#\#\#\#\#\n";
 	print "\#\#\#\#\#\#\#\#\#\#\# The values are presented as percents \#\#\#\#\#\#\#\#\#\#\#\#\n";
 	print "\#\#\#\#\#\#\#\#\#\#\# Licensed under The MIT License (MIT) \#\#\#\#\#\#\#\#\#\#\#\#\n";
-	print "\#\#\#\#\#\# Copyright (c) Aleksei A. Korzhenkov, 2016-2017 \#\#\#\#\#\#\#\n";
+	print "\#\#\#\#\#\# Copyright (c) Aleksei A. Korzhenkov, 2016-2018 \#\#\#\#\#\#\#\n";
 	print "\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\n";
 	exit;
 }

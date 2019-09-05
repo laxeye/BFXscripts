@@ -1,4 +1,4 @@
-#!/usr/bin/env perl -w
+#!/usr/bin/env perl
 # source http://seqanswers.com/forums/showthread.php?t=2766  author = BENM
 # count and maximum length added by Aaron Liston June 8, 2011
 # copied from https://github.com/ranjit58/NGS/

@@ -61,40 +61,49 @@ if ($ftype =~ /PACC/) {
 my $base = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
 
 foreach my $query (@queries){
+
 	$file_to_get ="0";
 
 	# Assemble and get the esearch URL
 	$url = $base . "esearch.fcgi?db=$db&term=$query";
 	$output = get($url);
-
+	
 	# Parse ID
-	next unless ($output =~ /<Id>(\d+)<\/Id>/);
-	$id = $1;
+	if ($output =~ /<Id>(\d+)<\/Id>/) {
+		$id = $1;
+	} else {
+		print STDERR "Id not found for query $query.\n";
+		next;
+	}
 
 	# Parse Taxonomy ID
 	$url = $base . "esummary.fcgi?db=$db&id=$id";
 	$output = get($url);
-	
-	if ($db =~ /assembly/) {
-		$org = $1 if ($output =~ /Taxid>(\d+)<\/Taxid>/);
+
+	if ($output =~ /Taxid.*>(\d+)</i) {
+		$taxid = $1;
 	} else {
-		$org = $1 if ($output =~ /TaxId.+>(\d+)</);
+		print STDERR "\"TaxId\" not found for query $query.\n";
+		next;
 	}
 
-	$url = $base . "esummary.fcgi?db=taxonomy&id=$org";
+	$url = $base . "esummary.fcgi?db=taxonomy&id=$taxid";
 	$output = get($url);
 
 	if ($output =~ /<Item Name="ScientificName".+>(.+)<\/Item>/){
 		$org = "$1";
 		$org =~ s/ /_/g;
 		$org =~ s/[\[\]]//g;
+	}else{
+		print STDERR "\"ScientificName\" not found";
+		next;
 	}
 
 	#Print substitutions to STDERR
 	print STDERR "Leaf: $query\tTaxon: $org\n";
 	
 	my $subst = $org."_".$query;
-	$file =~ s/[\w\d\.]*$query[\w\d\.]*/$subst/;
+	$file =~ s/[\w\d\.]*$query[\w\d\.\-]*/$subst/;
 }
 
 print $file;

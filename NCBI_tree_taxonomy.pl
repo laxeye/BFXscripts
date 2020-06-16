@@ -46,9 +46,6 @@ if ($ftype =~ "AACC") {
 
 close FILE;
 
-my ($ftpath,$dir,$file_to_get);
-my @files;
-
 # Setting DB
 my $db = 'assembly';
 if ($ftype =~ /PACC/) {
@@ -61,8 +58,6 @@ if ($ftype =~ /PACC/) {
 my $base = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
 
 foreach my $query (@queries){
-
-	$file_to_get ="0";
 
 	# Assemble and get the esearch URL
 	$url = $base . "esearch.fcgi?db=$db&term=$query";

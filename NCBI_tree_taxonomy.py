@@ -3,7 +3,6 @@ import argparse
 import re
 import sys
 import os.path
-import pandas
 import sqlite3
 from Bio import Phylo
 from Bio import Entrez

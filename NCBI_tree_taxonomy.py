@@ -72,12 +72,15 @@ def main():
             tax_array = res.fetchone()
             leaf_spec = tax_array[5]
             if args.print:
-                print('\t'.join(tax_array))
+                print('\t'.join([tax_array[0], tax_array[4], tax_array[5]]))
         else:
             r = assembly_info(leaf_acc)
             if r:
                 if args.print:
-                    print('\t'.join([leaf_acc] + list(r.values())))
+                    print('\t'.join([
+                        leaf_acc,
+                        r['SpeciesTaxid'],
+                        r['SpeciesName']]))
                 c.execute(insert_cmd, (
                     leaf_acc, r['id'], r['Taxid'], r['Organism'],
                     r['SpeciesTaxid'], r['SpeciesName']
